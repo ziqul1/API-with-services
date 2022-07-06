@@ -1,5 +1,6 @@
 using MojeAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using MojeAPI.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,9 +10,11 @@ builder.Services.AddControllers();
 
 builder.Services.AddDbContext<LibraryContext>();
 
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IBookService, BookService>();
 
 var app = builder.Build();
 

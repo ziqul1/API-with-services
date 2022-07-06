@@ -6,68 +6,38 @@ namespace MojeAPI.Data.Services
 {
     public class BookService : IBookService
     {
-
         private readonly LibraryContext _libraryContext;
 
         public BookService(LibraryContext libraryContext)
         {
             _libraryContext = libraryContext;
         }
+        
+        public async Task<IEnumerable<BookDTO>> GetBooks()
+        {
+            return await _libraryContext.Books
+                .Select(x => BookToDTO(x))
+                .ToListAsync();
+        }
 
-        //// GET: api/Books
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks()
-        //{
-        //    return await _libraryContext.Books
-        //        .Select(x => BookToDTO(x))
-        //        .ToListAsync();
-        //}
-
-
-        // GET: api/Books/1
-        [HttpGet("{id}")]
-        public async Task<ActionResult<BookDTO>> GetSingleBook(long id)
+        public async Task<BookDTO> GetSingleBook(long id)
         {
             var book = await _libraryContext.Books.FindAsync(id);
-
-            if (book == null)
-                return NotFound();
 
             return BookToDTO(book);
         }
 
-
-        // PUT: api/Books/1
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBook(long id, BookDTO bookDTO)
+        public async Task UpdateBook(long id, BookDTO bookDTO)
         {
-            if (id != bookDTO.Id)
-                return BadRequest();
-
             var book = await _libraryContext.Books.FindAsync(id);
-
-            if (book == null)
-                return NotFound();
 
             book.Title = bookDTO.Title;
             book.Price = bookDTO.Price;
 
-            try
-            {
-                await _libraryContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException) when (!BookExists(id))
-            {
-                return NotFound();
-            }
-
-            return NoContent();
+            await _libraryContext.SaveChangesAsync();
         }
 
-
-        // POST: api/Books
-        [HttpPost]
-        public async Task<ActionResult<BookDTO>> CreateBook(BookDTO bookDTO)
+        public async Task<BookDTO> CreateBook(BookDTO bookDTO)
         {
             var book = new Book
             {
@@ -78,31 +48,16 @@ namespace MojeAPI.Data.Services
             _libraryContext.Books.Add(book);
             await _libraryContext.SaveChangesAsync();
 
-            return Create
-
-            return CreatedAtAction(
-                nameof(GetSingleBook),
-                new { id = book.Id },
-                BookToDTO(book)
-                );
+            return BookToDTO(book);
         }
 
-
-
-        // DELETE: api/Books/1
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBook(long id)
+        public async Task DeleteBook(long id)
         {
             var book = await _libraryContext.Books.FindAsync(id);
-            if (book == null)
-                return NotFound();
 
             _libraryContext.Books.Remove(book);
             await _libraryContext.SaveChangesAsync();
-
-            return NoContent();
         }
-
 
         private bool BookExists(long id)
         {
@@ -116,18 +71,5 @@ namespace MojeAPI.Data.Services
                 Title = book.Title,
                 Price = book.Price,
             };
-
-
-       public async Task<IEnumerable<BookDTO>> IBookService.GetBooks()
-        {
-            return await _libraryContext.Books
-                .Select(x => BookToDTO(x))
-                .ToListAsync();
-        }
-
-        Task<IEnumerable<BookDTO>> IBookService.GetSingleBook(long id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

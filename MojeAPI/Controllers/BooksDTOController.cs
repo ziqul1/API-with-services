@@ -6,10 +6,9 @@ using MojeAPI.Models;
 
 namespace MojeAPI.Controllers
 {
-    // [Route("api/BooksDTO")] ????     
     [Route("api/[controller]")]
     [ApiController]
-    public class BooksDTOController : Controller
+    public class BooksDTOController : ControllerBase
     {
         private readonly IBookService _bookService;
 
@@ -18,29 +17,24 @@ namespace MojeAPI.Controllers
             _bookService = bookService;
         }
 
-
         // GET: api/Books
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BookDTO>>> GetBooks()
+        public async Task<IActionResult> GetBooks()
         {
-            return await _libraryContext.Books
-                .Select(x => BookToDTO(x))
-                .ToListAsync();
+            return Ok( await _bookService.GetBooks());
         }
-
 
         // GET: api/Books/1
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDTO>> GetSingleBook(long id)
         {
-           var result = _bookService.
+            var book = await _bookService.GetSingleBook(id);
 
             if (book == null)
                 return NotFound();
 
-            return BookToDTO(book);
+            return book;
         }
-
 
         // PUT: api/Books/1
         [HttpPut("{id}")]
@@ -49,76 +43,40 @@ namespace MojeAPI.Controllers
             if (id != bookDTO.Id)
                 return BadRequest();
 
-            var book = await _libraryContext.Books.FindAsync(id);
+            var book = await _bookService.GetSingleBook(id);
 
             if (book == null)
                 return NotFound();
 
-            book.Title = bookDTO.Title;
-            book.Price = bookDTO.Price;
-
-            try
-            {
-                await _libraryContext.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException) when (!BookExists(id))
-            {
-                return NotFound();
-            }
+            await _bookService.UpdateBook(id, bookDTO);
 
             return NoContent();
         }
-
 
         // POST: api/Books
         [HttpPost]
         public async Task<ActionResult<BookDTO>> CreateBook(BookDTO bookDTO)
         {
-            var book = new Book
-            {
-                Title = bookDTO.Title,
-                Price = bookDTO.Price,
-            };
-
-            _libraryContext.Books.Add(book);
-            await _libraryContext.SaveChangesAsync();
+            var book = _bookService.CreateBook(bookDTO);
 
             return CreatedAtAction(
                 nameof(GetSingleBook),
                 new { id = book.Id },
-                BookToDTO(book)
+                book
                 );
         }
-
-
 
         // DELETE: api/Books/1
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteBook(long id)
         {
-            var book = await _libraryContext.Books.FindAsync(id);
+            var book = await _bookService.GetSingleBook(id);
             if (book == null)
                 return NotFound();
 
-            _libraryContext.Books.Remove(book);
-            await _libraryContext.SaveChangesAsync();
-            
+            await _bookService.DeleteBook(id);
+
             return NoContent();
         }
-
-
-        private bool BookExists(long id)
-        {
-            return (_libraryContext.Books.Any(e => e.Id == id));
-        }
-
-        private static BookDTO BookToDTO(Book book) =>
-            new BookDTO
-            {
-                Id = book.Id,
-                Title = book.Title,
-                Price = book.Price,
-            };
-
     }
 }
