@@ -19,16 +19,18 @@ namespace MojeAPI.Controllers
 
         // GET: api/Books
         [HttpGet]
-        public async Task<IActionResult> GetBooks()
+        public async Task<IActionResult> GetBooksAsync()
         {
-            return Ok( await _bookService.GetBooks());
+            return Ok( await _bookService.GetBooksAsync());
         }
 
         // GET: api/Books/1
         [HttpGet("{id}")]
-        public async Task<ActionResult<BookDTO>> GetSingleBook(long id)
+        public async Task<ActionResult<BookDTO>> GetSingleBookAsync(int id)
         {
-            var book = await _bookService.GetSingleBook(id);
+            var book = await _bookService.GetSingleBookAsync(id);
+
+            // book ? NotFound() : book
 
             if (book == null)
                 return NotFound();
@@ -38,29 +40,29 @@ namespace MojeAPI.Controllers
 
         // PUT: api/Books/1
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBook(long id, BookDTO bookDTO)
+        public async Task<IActionResult> UpdateBookAsync(int id, BookDTO bookDTO)
         {
             if (id != bookDTO.Id)
                 return BadRequest();
 
-            var book = await _bookService.GetSingleBook(id);
+            var book = await _bookService.GetSingleBookAsync(id);
 
             if (book == null)
                 return NotFound();
 
-            await _bookService.UpdateBook(id, bookDTO);
+            await _bookService.UpdateBookAsync(id, bookDTO);
 
             return NoContent();
         }
 
         // POST: api/Books
         [HttpPost]
-        public async Task<ActionResult<BookDTO>> CreateBook(BookDTO bookDTO)
+        public async Task<ActionResult<BookDTO>> CreateBookAsync(BookDTO bookDTO)
         {
-            var book = _bookService.CreateBook(bookDTO);
+            var book = await _bookService.CreateBookAsync(bookDTO);
 
             return CreatedAtAction(
-                nameof(GetSingleBook),
+                nameof(GetSingleBookAsync),
                 new { id = book.Id },
                 book
                 );
@@ -68,13 +70,13 @@ namespace MojeAPI.Controllers
 
         // DELETE: api/Books/1
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBook(long id)
+        public async Task<IActionResult> DeleteBookAsync(int id)
         {
-            var book = await _bookService.GetSingleBook(id);
+            var book = await _bookService.GetSingleBookAsync(id);
             if (book == null)
                 return NotFound();
 
-            await _bookService.DeleteBook(id);
+            await _bookService.DeleteBookAsync(id);
 
             return NoContent();
         }

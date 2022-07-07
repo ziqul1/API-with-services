@@ -13,21 +13,26 @@ namespace MojeAPI.Data.Services
             _libraryContext = libraryContext;
         }
         
-        public async Task<IEnumerable<BookDTO>> GetBooks()
+        public async Task<IEnumerable<BookDTO>> GetBooksAsync()
         {
             return await _libraryContext.Books
                 .Select(x => BookToDTO(x))
                 .ToListAsync();
         }
 
-        public async Task<BookDTO> GetSingleBook(long id)
+        public async Task<BookDTO> GetSingleBookAsync(int id)
         {
             var book = await _libraryContext.Books.FindAsync(id);
 
-            return BookToDTO(book);
+            if (BookExists(id))
+                BookToDTO(book);
+            
+            return null;
+
+            // BookExists(id) ? BookToDTO(book) : null;
         }
 
-        public async Task UpdateBook(long id, BookDTO bookDTO)
+        public async Task UpdateBookAsync(int id, BookDTO bookDTO)
         {
             var book = await _libraryContext.Books.FindAsync(id);
 
@@ -37,7 +42,7 @@ namespace MojeAPI.Data.Services
             await _libraryContext.SaveChangesAsync();
         }
 
-        public async Task<BookDTO> CreateBook(BookDTO bookDTO)
+        public async Task<BookDTO> CreateBookAsync(BookDTO bookDTO)
         {
             var book = new Book
             {
@@ -51,7 +56,7 @@ namespace MojeAPI.Data.Services
             return BookToDTO(book);
         }
 
-        public async Task DeleteBook(long id)
+        public async Task DeleteBookAsync(int id)
         {
             var book = await _libraryContext.Books.FindAsync(id);
 
@@ -59,7 +64,7 @@ namespace MojeAPI.Data.Services
             await _libraryContext.SaveChangesAsync();
         }
 
-        private bool BookExists(long id)
+        private bool BookExists(int id)
         {
             return (_libraryContext.Books.Any(e => e.Id == id));
         }

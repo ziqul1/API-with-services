@@ -6,10 +6,10 @@ namespace MojeAPI.Data.Services
 {
     public interface IBookService
     {
-        public Task<IEnumerable<BookDTO>> GetBooks();
-        public Task<BookDTO> GetSingleBook(long id);
-        public Task UpdateBook(long id, BookDTO bookDTO);
-        public Task<BookDTO> CreateBook(BookDTO bookDTO);
-        public Task DeleteBook(long id);
+        public Task<IEnumerable<BookDTO>> GetBooksAsync();
+        public Task<BookDTO> GetSingleBookAsync(int id);
+        public Task UpdateBookAsync(int id, BookDTO bookDTO);
+        public Task<BookDTO> CreateBookAsync(BookDTO bookDTO);
+        public Task DeleteBookAsync(int id);
     }
 }
