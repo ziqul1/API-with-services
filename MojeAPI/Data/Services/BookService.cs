@@ -9,10 +9,8 @@ namespace MojeAPI.Data.Services
         private readonly LibraryContext _libraryContext;
 
         public BookService(LibraryContext libraryContext)
-        {
-            _libraryContext = libraryContext;
-        }
-        
+            => _libraryContext = libraryContext;
+
         public async Task<IEnumerable<BookDTO>> GetBooksAsync()
         {
             return await _libraryContext.Books
@@ -24,12 +22,7 @@ namespace MojeAPI.Data.Services
         {
             var book = await _libraryContext.Books.FindAsync(id);
 
-            if (BookExists(id))
-                BookToDTO(book);
-            
-            return null;
-
-            // BookExists(id) ? BookToDTO(book) : null;
+            return BookToDTO(book);
         }
 
         public async Task UpdateBookAsync(int id, BookDTO bookDTO)
@@ -62,11 +55,6 @@ namespace MojeAPI.Data.Services
 
             _libraryContext.Books.Remove(book);
             await _libraryContext.SaveChangesAsync();
-        }
-
-        private bool BookExists(int id)
-        {
-            return (_libraryContext.Books.Any(e => e.Id == id));
         }
 
         private static BookDTO BookToDTO(Book book) =>

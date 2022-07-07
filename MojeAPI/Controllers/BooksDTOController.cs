@@ -12,16 +12,14 @@ namespace MojeAPI.Controllers
     {
         private readonly IBookService _bookService;
 
-        public BooksDTOController(IBookService bookService)
-        {
-            _bookService = bookService;
-        }
+        public BooksDTOController(IBookService bookService) 
+            => _bookService = bookService;
 
         // GET: api/Books
         [HttpGet]
         public async Task<IActionResult> GetBooksAsync()
         {
-            return Ok( await _bookService.GetBooksAsync());
+            return Ok(await _bookService.GetBooksAsync());
         }
 
         // GET: api/Books/1
@@ -30,14 +28,14 @@ namespace MojeAPI.Controllers
         {
             var book = await _bookService.GetSingleBookAsync(id);
 
-            // book ? NotFound() : book
-
             if (book == null)
                 return NotFound();
 
             return book;
         }
 
+        //////////////////////    SKRÓCIĆ UPDATE I DELETE bo nie trzeba sprawdzać chyba w tej 46 i 47 i w parametrze podawać dwóch rzeczy
+        ///
         // PUT: api/Books/1
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBookAsync(int id, BookDTO bookDTO)
