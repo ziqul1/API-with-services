@@ -9,13 +9,13 @@ namespace MojeAPI.Models
         public LibraryContext(DbContextOptions<LibraryContext> options)
             : base(options)
         {
-            Database.Migrate();
+            //Database.Migrate();
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=LibraryDB;Trusted_Connection=True;");
-            base.OnConfiguring(optionsBuilder);
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=LibraryDB;Trusted_Connection=True;");
+        //    base.OnConfiguring(optionsBuilder);
+        //}
     }
 }
