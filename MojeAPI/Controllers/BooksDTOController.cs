@@ -72,7 +72,7 @@ namespace MojeAPI.Controllers
             if(await _bookService.DeleteBookAsync(id))
                 return NoContent();
 
-            return StatusCode(500);
+            return BadRequest();
         }
     }
 }

@@ -51,7 +51,7 @@ namespace BookAPI_Tests
 
             //Assert
             listOfBooks.Should().NotBeNull();
-            expectedFromDB.Should().NotBeNull();
+            //expectedFromDB.Should().NotBeNull();
             expectedFromDB.Should().BeEquivalentTo(listOfBooks);
         }
 
