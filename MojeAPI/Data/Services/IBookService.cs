@@ -8,8 +8,8 @@ namespace MojeAPI.Data.Services
     {
         public Task<IEnumerable<BookDTO>> GetBooksAsync();
         public Task<BookDTO> GetSingleBookAsync(int id);
-        public Task UpdateBookAsync(int id, BookDTO bookDTO);
+        public Task<long> UpdateBookAsync(int id, BookDTO bookDTO);
         public Task<BookDTO> CreateBookAsync(BookDTO bookDTO);
-        public Task DeleteBookAsync(int id);
+        public Task<bool> DeleteBookAsync(int id);
     }
 }

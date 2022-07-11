@@ -133,7 +133,7 @@ namespace BookAPI_Tests
             //Assert
             expectedFromDB.Should().BeNull();
         }
-
+        
         private static BookDTO BookToDTO(Book book) =>
            new BookDTO
            {
