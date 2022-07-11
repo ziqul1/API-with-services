@@ -6,15 +6,14 @@ namespace MojeAPI.Models
     {
         public DbSet<Book> Books { get; set; } = null!;
 
-        public LibraryContext(DbContextOptions<LibraryContext> options)
-            : base(options)
+        public LibraryContext(DbContextOptions<LibraryContext> options) : base(options)
         {
-            //Database.Migrate();
+
         }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
-        //    optionsBuilder.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=LibraryDB;Trusted_Connection=True;");
+        //    optionsBuilder.UseSqlServer("BooksConnectionString");
         //    base.OnConfiguring(optionsBuilder);
         //}
     }

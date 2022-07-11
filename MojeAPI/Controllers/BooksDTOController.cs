@@ -34,15 +34,10 @@ namespace MojeAPI.Controllers
             return book;
         }
 
-        //////////////////////    SKRÓCIĆ UPDATE I DELETE bo nie trzeba sprawdzać chyba w tej 46 i 47 i w parametrze podawać dwóch rzeczy
-        ///
         // PUT: api/Books/1
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBookAsync(int id, BookDTO bookDTO)
         {
-            if (id != bookDTO.Id)
-                return BadRequest();
-
             var book = await _bookService.GetSingleBookAsync(id);
 
             if (book == null)
@@ -58,7 +53,7 @@ namespace MojeAPI.Controllers
         public async Task<ActionResult<BookDTO>> CreateBookAsync(BookDTO bookDTO)
         {
             var book = await _bookService.CreateBookAsync(bookDTO);
-
+            
             return CreatedAtAction(
                 nameof(GetSingleBookAsync),
                 new { id = book.Id },
@@ -74,9 +69,10 @@ namespace MojeAPI.Controllers
             if (book == null)
                 return NotFound();
 
-            await _bookService.DeleteBookAsync(id);
+            if(await _bookService.DeleteBookAsync(id))
+                return NoContent();
 
-            return NoContent();
+            return StatusCode(500);
         }
     }
 }

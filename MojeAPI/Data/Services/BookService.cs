@@ -25,14 +25,14 @@ namespace MojeAPI.Data.Services
             return BookToDTO(book);
         }
 
-        public async Task UpdateBookAsync(int id, BookDTO bookDTO)
+        public async Task<long> UpdateBookAsync(int id, BookDTO bookDTO)
         {
             var book = await _libraryContext.Books.FindAsync(id);
 
             book.Title = bookDTO.Title;
             book.Price = bookDTO.Price;
 
-            await _libraryContext.SaveChangesAsync();
+            return await _libraryContext.SaveChangesAsync();
         }
 
         public async Task<BookDTO> CreateBookAsync(BookDTO bookDTO)
@@ -49,12 +49,15 @@ namespace MojeAPI.Data.Services
             return BookToDTO(book);
         }
 
-        public async Task DeleteBookAsync(int id)
+        public async Task<bool> DeleteBookAsync(int id)
         {
             var book = await _libraryContext.Books.FindAsync(id);
 
             _libraryContext.Books.Remove(book);
-            await _libraryContext.SaveChangesAsync();
+            if (await _libraryContext.SaveChangesAsync() != 1)
+                return false;
+
+            return true;
         }
 
         private static BookDTO BookToDTO(Book book) =>
