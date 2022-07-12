@@ -32,6 +32,7 @@ namespace MojeAPI.Data.Services
                     {
                         await _bookService.CreateBookAsync(record);
                     }
+
                     return true;
                 }
             }
@@ -47,9 +48,9 @@ namespace MojeAPI.Data.Services
             };
 
             var memoryStream = new MemoryStream();
-            using (var writer = new StreamWriter(memoryStream))
 
-            using(var csvWriter = new CsvWriter(writer, config))
+            using (var writer = new StreamWriter(memoryStream))
+            using (var csvWriter = new CsvWriter(writer, config))
             {
                 csvWriter.WriteRecords(await _bookService.FilterBooks(numberOfRecordsToTake, skip, filteredBooks));
             }
