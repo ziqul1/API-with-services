@@ -60,6 +60,22 @@ namespace MojeAPI.Data.Services
             return true;
         }
 
+        public async Task<List<BookDTO>> FilterBooks(int numberOfRecordsToTake, int skip, string filteredBooks)
+        {
+            var queryable = _libraryContext.Books.AsQueryable();
+
+            if (filteredBooks != null)
+                queryable = queryable.Where(x => x.Title.Contains(filteredBooks));
+
+            if (numberOfRecordsToTake > 0)
+                queryable = queryable.Take(numberOfRecordsToTake);
+
+            if (skip > 0)
+                queryable = queryable.Skip(skip);
+
+            return await queryable.Select(x => BookToDTO(x)).ToListAsync();
+        }
+
         private static BookDTO BookToDTO(Book book) =>
             new BookDTO
             {
