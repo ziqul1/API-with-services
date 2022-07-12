@@ -21,7 +21,7 @@ namespace MojeAPI.Controllers
         {
             return Ok(await _bookService.GetBooksAsync());
         }
-        //
+        
         // GET: api/Books/1
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDTO>> GetSingleBookAsync(int id)

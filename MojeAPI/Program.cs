@@ -18,9 +18,8 @@ builder.Services.AddDbContext<LibraryContext>(
     option => option.UseSqlServer(builder.Configuration.GetConnectionString("BooksConnectionString"))
     );
 
-// Initialize.GetContext();
-
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 var app = builder.Build();
 
