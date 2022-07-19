@@ -20,7 +20,7 @@ namespace MojeAPI.Controllers
         [HttpPost]
         public async Task<ActionResult> ReadFile(IFormFile filePath)
         {
-            if(await _fileService.ReadFile(filePath))
+            if (await _fileService.ReadFile(filePath))
                 return Ok();
             else
                 return NoContent();
@@ -31,10 +31,7 @@ namespace MojeAPI.Controllers
         {
             var bytes = await _fileService.WriteFile(numberOfRecordsToTake, skip, filteredBooks);
 
-            if (bytes != null)
-                return File(bytes, "application/json", Path.GetFileName("newBooks.csv"));
-            else
-                return NoContent();
+            return File(bytes, "application/json", Path.GetFileName("newBooks.csv"));
         }
     }
 }
