@@ -45,7 +45,7 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "MojeAPI v1"
 app.UseHttpsRedirection();
 
 app.MapControllers();
-
+//
 // Using CORS to working API properly with Angular FRONT
 app.UseCors(x => x.AllowAnyHeader()
       .AllowAnyMethod()
