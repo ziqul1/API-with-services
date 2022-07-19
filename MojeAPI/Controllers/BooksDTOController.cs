@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MojeAPI.Data.Services;
 using MojeAPI.Models;
@@ -16,14 +17,14 @@ namespace MojeAPI.Controllers
             => _bookService = bookService;
 
         // GET: api/Books
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<IActionResult> GetBooksAsync()
         {
             return Ok(await _bookService.GetBooksAsync());
         }
         
         // GET: api/Books/1
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize]
         public async Task<ActionResult<BookDTO>> GetSingleBookAsync(int id)
         {
             var book = await _bookService.GetSingleBookAsync(id);
@@ -35,7 +36,7 @@ namespace MojeAPI.Controllers
         }
 
         // PUT: api/Books/1
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize]
         public async Task<IActionResult> UpdateBookAsync(int id, BookDTO bookDTO)
         {
             var book = await _bookService.GetSingleBookAsync(id);
@@ -49,7 +50,7 @@ namespace MojeAPI.Controllers
         }
 
         // POST: api/Books
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<ActionResult<BookDTO>> CreateBookAsync(BookDTO bookDTO)
         {
             var book = await _bookService.CreateBookAsync(bookDTO);
@@ -62,7 +63,7 @@ namespace MojeAPI.Controllers
         }
 
         // DELETE: api/Books/1
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize]
         public async Task<IActionResult> DeleteBookAsync(int id)
         {
             var book = await _bookService.GetSingleBookAsync(id);
