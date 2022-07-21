@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using EmailServiceV2;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.FeatureManagement;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +37,9 @@ var emailConfig = builder.Configuration
         .GetSection("EmailConfiguration")
         .Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
+
+
+
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -86,6 +91,14 @@ builder.Services.AddDbContext<LibraryContext>(
 
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddFeatureManagement();
+
+builder.Services.Configure<FormOptions>(o => {
+    o.ValueLengthLimit = int.MaxValue;
+    o.MultipartBodyLengthLimit = int.MaxValue;
+    o.MemoryBufferThreshold = int.MaxValue;
+});
 
 
 var app = builder.Build();
