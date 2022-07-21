@@ -27,7 +27,7 @@ builder.Services.AddAuthentication(opt =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("superSecretKey@345"))
         };
     });
-
+//
 // Add services to the container.
 builder.Services.AddControllers();
 
